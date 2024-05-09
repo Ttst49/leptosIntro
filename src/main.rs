@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::web_sys::console::count;
 
 fn main() {
     console_error_panic_hook::set_once();
@@ -8,6 +9,7 @@ fn main() {
 #[component]
 fn App()->impl IntoView{
     let (count,set_count) = create_signal(0);
+    let double_count = move || count()*2;
     view! {
         <button
             on:click=move |_| {
@@ -23,10 +25,22 @@ fn App()->impl IntoView{
             "Click me: "
             {count}
         </button>
+        <ProgressBar max=10 progress=count />x
+        <ProgressBar max=10 progress=double_count />x
+    }
+}
+
+#[component]
+fn ProgressBar<F>(
+    #[prop(default=100)]
+    max: usize,
+    progress: F
+)->impl IntoView{
+    view! {
         <progress
-            max="100"
-        class="middle"
-            value=count
+            class="middle"
+            max=max
+            value=progress
         />
     }
 }
