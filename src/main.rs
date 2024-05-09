@@ -1,9 +1,10 @@
 use leptos::*;
-use leptos::web_sys::console::count;
+use std::thread::*;
+use std::time::Duration;
 
 fn main() {
     console_error_panic_hook::set_once();
-    mount_to_body(|| view! { <App />})
+    mount_to_body(App)
 }
 
 #[component]
@@ -31,11 +32,11 @@ fn App()->impl IntoView{
 }
 
 #[component]
-fn ProgressBar<F>(
+fn ProgressBar<F:Fn() -> i32 + 'static,>(
     #[prop(default=100)]
     max: usize,
     progress: F
-)->impl IntoView{
+)->impl IntoView {
     view! {
         <progress
             class="middle"
