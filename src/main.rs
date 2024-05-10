@@ -212,5 +212,17 @@ fn UncontrolledInput()->impl IntoView{
         <input type="submit" value="Submit"/>
     </form>
     <p>"Name is: " {name}</p>
+    }
 }
+
+#[component]
+fn SelectOption(is: &'static str,value:ReadSignal<String>)->impl IntoView{
+    view! {
+        <option
+            value=is
+            selected=move || value() == is
+        >
+            {is}
+        </option>
+    }
 }
