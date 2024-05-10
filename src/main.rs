@@ -59,7 +59,7 @@ fn App()->impl IntoView{
         //         </select>
         //         <p>{value}</p>
 
-
+        <IfComponentStatement />
     }
 }
 
@@ -252,5 +252,20 @@ fn SelectOption(is: &'static str,value:ReadSignal<String>)->impl IntoView{
         >
             {is}
         </option>
+    }
+}
+
+#[component]
+fn IfComponentStatement()->impl IntoView{
+    let (value, set_value) = create_signal(1);
+    let is_odd = move || value() & 1 == 1;
+    view! {
+        <p>
+        {move || if is_odd(){
+            "Odd"
+        }else{
+            "Even"
+        }}
+        </p>
     }
 }
