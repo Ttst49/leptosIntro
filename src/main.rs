@@ -30,7 +30,8 @@ fn App()->impl IntoView{
         //<List/>
         //<DynamicList initial_length=5 />
         //<DynamicComplexList />
-        <BasicInput />
+        <ControlledInput />
+        <UncontrolledInput />
     }
 }
 
@@ -177,7 +178,7 @@ fn DynamicComplexList()->impl IntoView{
 }
 
 #[component]
-fn BasicInput()->impl IntoView{
+fn ControlledInput()->impl IntoView{
     let (name,set_name) = create_signal("Controlled".to_string());
 
     view! {
@@ -189,4 +190,27 @@ fn BasicInput()->impl IntoView{
         />
         <p>Name is {name}</p>
     }
+}
+
+#[component]
+fn UncontrolledInput()->impl IntoView{
+    let (name,set_name) = create_signal("uncontrolled".to_string());
+    let input_element:NodeRef<html::Input> = create_node_ref();
+    let on_submit = move |ev: leptos::ev::SubmitEvent| {
+        ev.prevent_default();
+        let value = input_element()
+            .expect("<input> should be mounted")
+            .value();
+        set_name(value);
+    };
+    view! {
+    <form on:submit=on_submit>
+        <input type="text"
+            value=name
+            node_ref=input_element
+        />
+        <input type="submit" value="Submit"/>
+    </form>
+    <p>"Name is: " {name}</p>
+}
 }
