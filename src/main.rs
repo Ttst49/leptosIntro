@@ -259,13 +259,14 @@ fn SelectOption(is: &'static str,value:ReadSignal<String>)->impl IntoView{
 fn IfComponentStatement()->impl IntoView{
     let (value, set_value) = create_signal(1);
     let is_odd = move || value() & 1 == 1;
+    let message = move || if is_odd() {
+        Some("Oh yeah it's odd")
+    }else {
+        None
+    };
     view! {
         <p>
-        {move || if is_odd(){
-            "Odd"
-        }else{
-            "Even"
-        }}
+        {message}
         </p>
     }
 }
