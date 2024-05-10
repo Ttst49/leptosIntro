@@ -29,7 +29,8 @@ fn App()->impl IntoView{
         //<ProgressBar max=10 progress=double_count />x
         //<List/>
         //<DynamicList initial_length=5 />
-        <DynamicComplexList />
+        //<DynamicComplexList />
+        <BasicInput />
     }
 }
 
@@ -134,7 +135,7 @@ fn DynamicList(
 #[derive(Debug, Clone)]
 struct DatabaseEntry {
     key: String,
-    value: i32,
+    value: RwSignal<isize>,
 }
 
 #[component]
@@ -142,22 +143,22 @@ fn DynamicComplexList()->impl IntoView{
     let (data,set_data) = create_signal(vec![
         DatabaseEntry{
             key:"foo".to_string(),
-            value: 1
+            value: create_rw_signal(1)
         },
         DatabaseEntry{
             key:"bar".to_string(),
-            value: 2
+            value: create_rw_signal(2)
         },
         DatabaseEntry{
             key:"man".to_string(),
-            value: 3
+            value: create_rw_signal(3)
         }
     ]);
         view! {
             <button on:click=move |_|{
                 set_data.update(|data|{
                     for row in data{
-                        row.value*=2;
+                        row.value.update(|value| *value*=2)
                     }
                 });
                 logging::log!("{:?}",data.get())
@@ -166,11 +167,26 @@ fn DynamicComplexList()->impl IntoView{
             </button>
             <For
             each=data
-            key=|state| (state.key.clone(), state.value)
+            key=|state| state.key.clone()
             let:child
             >
             <p>{child.value}</p>
             </For>
 
         }
+}
+
+#[component]
+fn BasicInput()->impl IntoView{
+    let (name,set_name) = create_signal("Controlled".to_string());
+
+    view! {
+        <input type="text"
+        on:input=move |ev|{
+            set_name(event_target_value(&ev));
+        }
+        prop:value=name
+        />
+        <p>Name is {name}</p>
+    }
 }
