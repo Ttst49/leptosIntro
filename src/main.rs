@@ -10,6 +10,7 @@ fn main() {
 fn App()->impl IntoView{
     let (count,set_count) = create_signal(0);
     let double_count = move || count()*2;
+    let (value,set_value) = create_signal("B".to_string());
     view! {
         //<button
         //             on:click=move |_| {
@@ -25,13 +26,40 @@ fn App()->impl IntoView{
         //             "Click me: "
         //             {count}
         //         </button>
+
+
         //<ProgressBar max=10 progress=count />x
+
+
         //<ProgressBar max=10 progress=double_count />x
+
+
         //<List/>
+
+
         //<DynamicList initial_length=5 />
+
+
         //<DynamicComplexList />
-        <ControlledInput />
-        <UncontrolledInput />
+
+
+        //<ControlledInput />
+
+
+        //<UncontrolledInput />
+
+
+        // <select on:change=move |ev| {
+        //             let new_value = event_target_value(&ev);
+        //             set_value(new_value);
+        //         }>
+        //             <SelectOption value is="A"/>
+        //             <SelectOption value is="B"/>
+        //             <SelectOption value is="C"/>
+        //         </select>
+        //         <p>{value}</p>
+
+
     }
 }
 
