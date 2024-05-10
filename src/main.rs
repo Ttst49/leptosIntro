@@ -1,6 +1,5 @@
 use leptos::*;
-use std::thread::*;
-use std::time::Duration;
+
 
 fn main() {
     console_error_panic_hook::set_once();
@@ -28,6 +27,7 @@ fn App()->impl IntoView{
         </button>
         <ProgressBar max=10 progress=count />x
         <ProgressBar max=10 progress=double_count />x
+        <List/>
     }
 }
 
@@ -43,5 +43,22 @@ fn ProgressBar<F:Fn() -> i32 + 'static,>(
             max=max
             value=progress
         />
+    }
+}
+
+#[component]
+fn List()->impl IntoView{
+    let values = vec![12,14,16,18];
+    view! {
+        <p>{values.clone()}</p>
+        <span>clone function</span>
+
+        <ul>
+        {values.into_iter()
+            .map(|n| view! {<li>{n}</li>})
+            //.collect::<Vec<_>>()
+            .collect_view()}
+        </ul>
+        <span>mapping function</span>
     }
 }
