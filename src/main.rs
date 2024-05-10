@@ -142,15 +142,15 @@ fn DynamicComplexList()->impl IntoView{
     let (data,set_data) = create_signal(vec![
         DatabaseEntry{
             key:"foo".to_string(),
-            value: 10
+            value: 1
         },
         DatabaseEntry{
             key:"bar".to_string(),
-            value: 34
+            value: 2
         },
         DatabaseEntry{
             key:"man".to_string(),
-            value: 45
+            value: 3
         }
     ]);
         view! {
@@ -166,7 +166,7 @@ fn DynamicComplexList()->impl IntoView{
             </button>
             <For
             each=data
-            key=|state| state.key.clone()
+            key=|state| (state.key.clone(), state.value)
             let:child
             >
             <p>{child.value}</p>
