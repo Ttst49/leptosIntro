@@ -59,7 +59,9 @@ fn App()->impl IntoView{
         //         </select>
         //         <p>{value}</p>
 
-        <IfComponentStatement />
+        //<IfComponentStatement />
+
+        <NumericInput />
     }
 }
 
@@ -277,5 +279,22 @@ fn IfComponentStatement()->impl IntoView{
         <p>
         {message}
         </p>
+    }
+}
+
+#[component]
+fn NumericInput()->impl IntoView{
+    let (value,set_value) = create_signal(Ok(0));
+
+    let on_input = move |ev| set_value(event_target_value(&ev).parse::<i32>());
+    view! {
+        <label>
+            "Type a number (or not!)"
+            <input type="number" on:input=on_input/>
+            <p>
+                "You entered "
+                <strong>{value}</strong>
+            </p>
+        </label>
     }
 }
