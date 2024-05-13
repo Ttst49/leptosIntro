@@ -11,6 +11,7 @@ fn App()->impl IntoView{
     let (count,set_count) = create_signal(0);
     let double_count = move || count()*2;
     let (value,set_value) = create_signal("B".to_string());
+    let (toggled, set_toggled) = create_signal(false);
     view! {
         //<button
         //             on:click=move |_| {
@@ -62,6 +63,9 @@ fn App()->impl IntoView{
         //<IfComponentStatement />
 
         <NumericInput />
+
+        <p>"Toggled? " {toggled}</p>
+        <ToggleButton setter=set_toggled/>
     }
 }
 
@@ -311,5 +315,17 @@ fn NumericInput() -> impl IntoView {
                 <p>"You entered " <strong>{value}</strong></p>
             </ErrorBoundary>
         </label>
+    }
+}
+
+
+#[component]
+fn ToggleButton(setter:WriteSignal<bool>)->impl IntoView{
+    view! {
+        <button
+            on:click=move |_| setter.update(|value| *value = !*value)
+        >
+            "Toggle"
+        </button>
     }
 }
